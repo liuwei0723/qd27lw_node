@@ -18,7 +18,12 @@ app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 600000 }}))
 
 //导入路由对象
 const accountRouter = require(path.join(__dirname, "routers/accountRouter.js"))
+
+const studentRouter = require(path.join(__dirname, "routers/studentRouter.js"))
+
 app.use('/account', accountRouter)
+app.use('/studentmanager', studentRouter)
+
 
 //启动
 app.listen(3000, '127.0.0.1', err => {
