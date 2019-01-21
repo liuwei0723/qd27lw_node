@@ -105,7 +105,9 @@ exports.login = (req, res) => {
 
     } = req.body
     // 校验验证码
-    if (req.body.vcode != req.session.vcode) {
+    // console.log(vcode,req.session.vcode);
+    
+    if (vcode != req.session.vcode) {
         result.status = 1;
         result.message = "验证码不正确";
 
@@ -122,23 +124,27 @@ exports.login = (req, res) => {
         //拿到集合
         const collection = db.collection('accountInfo')
         // console.log(collection);
-        
+
         //查询一个
-        collection.find({
-            username: req.body.username,
-            password: req.body.password
-        }, (err, doc) => {
-            // console.log(doc);
-            // 如果doc == null 没有查询到，就可以插入，如果查询到了，说明用户名已经存在
-            if (doc == null) {
+        collection.findOne({
+            username,
+            password
+        },(err, doc) => {
+            console.log(doc);
+            // console.log(req.body.username);
+            // console.log(req.body.password);
+            if (!doc) {
                 result.status = 2
                 result.message = '用户名或者密码错误'
                 client.close();
                 res.json(result)
             } else {
                 req.session.loginedName = req.body.username
+                
+                res.json(result)
+                
             }
-            res.json(result);
+            // res.json(result);
         })
 
     });
