@@ -45,6 +45,7 @@ exports.register = (req, res) => {
                     // result2 有值，代表成功 result2 为null就是失败
 
                 }
+
                 res.json(result)
             })
         }
@@ -100,11 +101,23 @@ exports.login = (req, res) => {
         username,
         password
     }, (err, doc) => {
+        console.log(username);
+        
         if (!doc) {
             result.status = 2
             result.message = '用户名或者密码错误'
-
-        }
+            
+        }else{
+            req.session.loginedName = username;
+        } 
         res.json(result)
     })
 }
+// 注销处理
+exports.logout = (req,res) => {
+    // 清空session中的loginedname
+    req.session.loginedName = null
+  
+    // 告诉浏览器跳回到登录页面
+    res.send('<script>location.href="/account/login"</script>')
+  }

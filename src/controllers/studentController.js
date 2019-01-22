@@ -12,14 +12,15 @@ const getStudentListPage = (req, res) => {
     }, (err, doc) => {
         const html = template(path.join(__dirname, "../public/views/list.html"), {
             students: doc,
-            keyword
+            keyword,
+            loginedName:req.session.loginedName
         });
         res.send(html);
     })
 };
 //获取新增页面
 const getAddStudentPage = (req, res) => {
-    const html = template(path.join(__dirname, "../public/views/add.html"), {});
+    const html = template(path.join(__dirname, "../public/views/add.html"), {loginedName:req.session.loginedName});
     res.send(html);
 }
 //操作新增页面
@@ -44,7 +45,7 @@ const getEditStudentPage = (req, res) => {
         _id
     }, (err, doc) => {
         console.log(doc);
-
+        doc.loginedName = req.session.loginedName
         const html = template(path.join(__dirname, "../public/views/edit.html"), doc);
         res.send(html);
     })
