@@ -67,9 +67,9 @@
         location.href = '/studentmanager/list?keyword=' + keyword
     }
 
-    function deleteStudent(studentId) {
+    function deleteStudent(_id) {
         if (confirm("确定删除吗?")) {
-            location.href = `/studentmanager/delete/${studentId}`
+            location.href = `/studentmanager/delete/${_id}`
         }
     }
 

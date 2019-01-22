@@ -38,24 +38,45 @@ const addStudent = (req, res) => {
 };
 //获取编辑页面
 const getEditStudentPage = (req, res) => {
-    const html = template(path.join(__dirname, "../public/views/edit.html"), {});
-    res.send(html);
+    const _id = databasetool.ObjectId(req.params.studentId)
+
+    databasetool.findYige("studentInfo", {
+        _id
+    }, (err, doc) => {
+        console.log(doc);
+
+        const html = template(path.join(__dirname, "../public/views/edit.html"), doc);
+        res.send(html);
+    })
+
 }
 //操作编辑页面
 const editStudent = (req, res) => {
-    
+    const _id = databasetool.ObjectId(req.params.studentId)
+
+    databasetool.updateYige("studentInfo", {
+        _id
+    }, req.body, (err, result) => {
+        if (!result) {
+            // 编辑失败
+            res.send(`<script>alert("编辑失败!");</script>`);
+        } else {
+            //编辑成功
+            res.send(`<script>window.location.href="/studentmanager/list"</script>`);
+        }
+    })
 };
 
 /**
  * 根据id删除学生信息
  */
 const deleteStudent = (req, res) => {
-    databasetool.deleteOne(
+    databasetool.deleteYige(
         "studentInfo", {
             _id: databasetool.ObjectId(req.params.studentId)
         },
         (err, result) => {
-            if (result == null) {
+            if (!result) {
                 // 删除失败
                 res.send(`<script>alert("删除失败!");</script>`);
             } else {
